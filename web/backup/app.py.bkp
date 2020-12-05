@@ -1,0 +1,89 @@
+# import the Flask class from the flask module
+from flask import Flask, render_template, redirect, url_for, request, session, g
+import docker
+from docker import client
+from flask_session import Session
+import requests
+from containerip import example_blueprint
+from login import login
+from containerCreate import containercreate
+
+#import mysql.connector
+
+# create the application object
+app = Flask(__name__)
+app.secret_key = "10pearls"  
+
+app.register_blueprint(example_blueprint)
+app.register_blueprint(login)
+app.register_blueprint(containercreate)
+# use decorators to link the function to a url
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/welcome')
+def welcome():
+    return render_template('welcome.html',user=session['user'])  # render a template
+
+@app.before_request
+def before_request():
+    g.user = None
+    g.hostip = None
+    if 'username' in session:
+        session['user'] = request.form['username']
+    # if 'hostip' in session:
+    #     session['hostip'] = 
+
+# Route for handling the login page logic
+# @app.route('/login', methods=['GET', 'POST'])
+# def index():
+#     error = None
+#     user = None
+#     if request.method == 'POST':
+#         session.pop(user, None)
+#         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+#             error = 'Invalid Credentials. Please try again.'
+#         else:        
+#             session['user'] = request.form['username']
+#             return redirect(url_for('welcome'))
+#     return render_template('login.html', error=error)
+
+@app.route('/scenario')
+def scenarioOne ():
+    return render_template('scenarios.html')
+    
+# @app.route('/scene1')
+# def dockerWeb ():
+#     client = docker.from_env()
+#     ContainerName = session['user']
+
+#     container = client.containers.run('openssh:1.0.0', '/bin/sleep 10800', detach=True, name=ContainerName, environment=['env=DEV', 'ROOT_PASS=mypass'], ports={'22/tcp':1222})
+#     return render_template('ssh.html')
+
+@app.route('/Connect')
+def ConnectInfo():
+    ContainerName = None
+    ContainerIP = None
+    ip_add = None
+    ContainerName = session['user']
+    client = docker.DockerClient()
+    container = client.containers.get(session['user'])
+    ContainerIP = container.attrs['NetworkSettings']['IPAddress']
+    return ContainerIP
+    g.hostip = ContainerIP
+    #return ConnectInfo.ConnectInfo()
+@app.route('/ssh')
+def connectrout ():
+    hostip = ConnectInfo()
+    #return hostip
+    return render_template('ssh.html', hostip=hostip)
+
+@app.route('/push')
+def dockerPush():
+    return "Welcome to docker Push page"
+
+# start the server with the 'run()' method
+if __name__ == '__main__':
+    app.run(debug=True)
+

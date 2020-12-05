@@ -1,0 +1,9 @@
+Flask
+docker
+wssh
+pytest 
+pytest-cov 
+codecov 
+flake8 
+mock
+Flask-Session

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>10Pearls DevOps Simulator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../static/login.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+  </head>
+  <body>
+    <div class="content">
+      <br>
+      <table border="1", align="center" > 
+        <tr>
+          <td>
+            <h2 class="Welcome">Hi "{{user}}" Welcome to 10Pearls DevOps Testing Suite</i></h2>
+          </td>
+        </tr>
+      </table>
+        <h4>Scenario # 1 Setting Up Web Server [Apache]</h4>
+        <p>Base OS : Ubuntu 18.04 LTS </p>
+        <h6>Environment : Docker Engine 18+</h6>
+        <p> We would like you setup Apache Web server with below requirements : </p>
+        <ul>
+          <li>Setup Apache Web Server In Docker Container </li>
+          <li>Server Should listen to port 80</li>
+          <li>Create a Virtual host with port 80</li>
+          <li>Add Server Alias in Virtual Host and point it to local machine with name (web1.10pearls.com)</li>
+          <li>Setup SSL on Virtual Host preferebly LetsEnvrypt</li>
+          <li>Set Document Root to /usr/share/doc/html </li>
+        </ul> 
+            <a href = /scene1> Ready for Scenario </a> </br>
+            <a href = /ssh target="_blank"> Connect to Simulator </a>
+      <br>  
+      <p>Click <a href="/"> here </a> to go home.</p>
+    </div>
+  </body>
+</html>
