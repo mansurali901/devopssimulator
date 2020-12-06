@@ -12,6 +12,7 @@ import os
 # Blueprints import here 
 from ContainerCommit import containercommit
 from containerCreate import containercreate
+from ScenarioVerify import containerverify
 
 # create the application object
 app = Flask(__name__)
@@ -20,15 +21,21 @@ app.secret_key = "10pearls"
 # Loading all Blueprints 
 app.register_blueprint(containercommit)
 app.register_blueprint(containercreate)
+app.register_blueprint(containerverify)
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
 
 # Enter your database connection details below
 app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_USER'] = 'root'   
 app.config['MYSQL_PASSWORD'] = 'Welcome@1'
 app.config['MYSQL_DB'] = 'pythonlogin'
+
+# # Callable Properties 
+dockerRegistry = app.config.get("REGISTRY")
+dockerUsername = app.config.get("DOCKER_USER")
+dockerPassword = app.config.get("DOCKER_PASSWORD")   
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -107,6 +114,9 @@ def index():
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
 
+def Debug():
+    print(dockerRegistry)
+    return dockerRegistry   
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True)

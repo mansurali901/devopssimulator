@@ -7,7 +7,7 @@ import requests
 containerpush = Blueprint('containerpush', __name__)
 
 @containerpush.route('/scene1')
-def pushImage():
+def index():
     print('Starting pushing docker image')
     client = docker.from_env()
     client.images.push(repository='mansurali901/test')
