@@ -13,6 +13,7 @@ import os
 from ContainerCommit import containercommit
 from containerCreate import containercreate
 from ScenarioVerify import containerverify
+from logout import logout
 
 # create the application object
 app = Flask(__name__)
@@ -22,6 +23,7 @@ app.secret_key = "10pearls"
 app.register_blueprint(containercommit)
 app.register_blueprint(containercreate)
 app.register_blueprint(containerverify)
+app.register_blueprint(logout)
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
@@ -40,60 +42,12 @@ dockerPassword = app.config.get("DOCKER_PASSWORD")
 # Intialize MySQL
 mysql = MySQL(app)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST', 'UPDATE'])
 def home():
     if session.get('loggedin') is not None:
         return render_template('welcome.html')
     else:    
-        return render_template('index.html')
-
-@app.route('/welcome')
-def welcome():
-    if session.get('loggedin') is not None:
-        return render_template('welcome.html',user=session['user'])  # render a template
-    else:
-        return render_template('index.html')
-
-## Session Token generation after login
-@app.before_request
-def before_request():
-    g.user = None
-    g.hostip = None
-    if 'username' in session:
-        session['user'] = session['username']
-
-# Scenario pages 
-@app.route('/scenario')
-def scenarioOne ():
-    if session.get('loggedin') is not None:
-        return render_template('scenarios.html')
-    else:
-        return render_template('index.html')
-# SSH Docker container IP
-# This function generate or get IP Docker Container IP
-
-@app.route('/Connect')
-def ConnectInfo():
-    if session.get('loggedin') is not None:
-        ContainerName = None
-        ContainerIP = None
-        ip_add = None
-        ContainerName = session['user']
-        client = docker.DockerClient()
-        container = client.containers.get(session['user'])
-        ContainerIP = container.attrs['NetworkSettings']['IPAddress']
-        return ContainerIP
-        g.hostip = ContainerIP
-    else:
-        return render_template('index.html')
-# Rendering page for docker container ssh 
-@app.route('/ssh')
-def connectrout ():
-    if session.get('loggedin') is not None:
-        hostip = ConnectInfo()
-        return render_template('ssh.html', hostip=hostip)
-    else:
-        return render_template('index.html')
+        return redirect(url_for('login')) 
 
 # Login Section
 @app.route('/login', methods=['GET', 'POST'])
@@ -124,6 +78,55 @@ def index():
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
+
+@app.route('/welcome', methods=['GET', 'POST', 'UPDATE'])
+def welcome():
+    if session.get('loggedin') is not None:
+        return render_template('welcome.html',user=session['user'])  # render a template
+    else:
+        return redirect('/login')
+
+## Session Token generation after login
+@app.before_request
+def before_request():
+    g.user = None
+    g.hostip = None
+    if 'username' in session:
+        session['user'] = session['username']
+
+# Scenario pages 
+@app.route('/scenario', methods=['GET', 'POST', 'UPDATE'])
+def scenarioOne ():
+    if session.get('loggedin') is not None:
+        return render_template('scenarios.html')
+    else:
+        return redirect('/login')
+
+# SSH Docker container IP
+# This function generate or get IP Docker Container IP
+
+@app.route('/Connect', methods=['GET', 'POST', 'UPDATE'])
+def ConnectInfo():
+    if session.get('loggedin') is not None:
+        ContainerName = None
+        ContainerIP = None
+        ip_add = None
+        ContainerName = session['user']
+        client = docker.DockerClient()
+        container = client.containers.get(session['user'])
+        ContainerIP = container.attrs['NetworkSettings']['IPAddress']
+        return ContainerIP
+        g.hostip = ContainerIP
+    else:
+        return redirect('/login')
+# Rendering page for docker container ssh 
+@app.route('/ssh', methods=['GET', 'POST', 'UPDATE'])
+def connectrout ():
+    if session.get('loggedin') is not None:
+        hostip = ConnectInfo()
+        return render_template('ssh.html', hostip=hostip)
+    else:
+        return redirect('/login')
   
 # start the server with the 'run()' method
 if __name__ == '__main__':

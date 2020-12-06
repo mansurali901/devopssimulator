@@ -6,12 +6,15 @@ import requests
 
 containercreate = Blueprint('containercreate', __name__)
 
-@containercreate.route('/scene1')
+@containercreate.route('/scene1', methods=['GET', 'POST', 'UPDATE'])
 def index():
     if session.get('loggedin') is not None:
         client = docker.from_env()
         ContainerName = session['user']
-        container = client.containers.run('openssh:1.0.0', '/bin/sleep 10800', detach=True, name=ContainerName, environment=['env=DEV', 'ROOT_PASS=mypass'], ports={'22/tcp':1222})
+
+        container = client.containers.run('openssh:1.0.0', '/bin/sleep 10800', detach=True, name=ContainerName, environment=['env=DEV', 'ROOT_PASS=mypass'])
+        commandContainer = client.containers.get(ContainerName)
+        commandContainer.exec_run('service ssh start', stdout=True)
         return render_template('ssh.html')
     else:
-         return render_template('index.html')   
+         return redirect('/login')  

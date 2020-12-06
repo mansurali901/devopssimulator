@@ -16,7 +16,7 @@ app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
 containercommit = Blueprint('containercommit', __name__)
 
 # Route Defination 
-@containercommit.route('/commit')
+@containercommit.route('/commit', methods=['GET', 'POST', 'UPDATE'])
 def index():
     if session.get('loggedin') is not None:
         containerSessionID = session['user']
@@ -35,4 +35,4 @@ def index():
         print("Image has been commited")
         return containerpush.pushImage()
     else:
-        return render_template('index.html')
+        return redirect('/login')
