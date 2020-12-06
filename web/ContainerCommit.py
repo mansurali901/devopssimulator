@@ -18,18 +18,21 @@ containercommit = Blueprint('containercommit', __name__)
 # Route Defination 
 @containercommit.route('/commit')
 def index():
-    containerSessionID = session['user']
-    g.csID = session['user']
-    registryName = app.config.get("REGISTRY")
-    ImageName = registryName + '/' + containerSessionID
-    now = datetime.datetime.now()
-    timestamp = now.strftime("%Y%b%d")
-    client = docker.from_env()
-    container = client.containers.get(containerSessionID)
-    print("Start commiting your docker image...")
-    container.commit(repository=containerSessionID, tag=timestamp)
-    client.containers.get(containerSessionID) 
-    container.stop()
-    container.remove()
-    print("Image has been commited")
-    return containerpush.pushImage()
+    if session.get('loggedin') is not None:
+        containerSessionID = session['user']
+        g.csID = session['user']
+        registryName = app.config.get("REGISTRY")
+        ImageName = registryName + '/' + containerSessionID
+        now = datetime.datetime.now()
+        timestamp = now.strftime("%Y%b%d")
+        client = docker.from_env()
+        container = client.containers.get(containerSessionID)
+        print("Start commiting your docker image...")
+        container.commit(repository=containerSessionID, tag=timestamp)
+        client.containers.get(containerSessionID) 
+        container.stop()
+        container.remove()
+        print("Image has been commited")
+        return containerpush.pushImage()
+    else:
+        return render_template('index.html')

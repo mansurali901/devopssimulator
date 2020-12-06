@@ -27,10 +27,10 @@ app.register_blueprint(containerverify)
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
 
 # Enter your database connection details below
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_USER'] = 'root'   
-app.config['MYSQL_PASSWORD'] = 'Welcome@1'
-app.config['MYSQL_DB'] = 'pythonlogin'
+app.config['MYSQL_HOST'] = app.config.get("MYSQL_HOST_IP")
+app.config['MYSQL_USER'] = app.config.get("MYSQL_USER")   
+app.config['MYSQL_PASSWORD'] = app.config.get("MYSQL_PASS")
+app.config['MYSQL_DB'] = app.config.get("AUTHDB")
 
 # # Callable Properties 
 dockerRegistry = app.config.get("REGISTRY")
@@ -42,14 +42,19 @@ mysql = MySQL(app)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    if session.get('loggedin') is not None:
+        return render_template('welcome.html')
+    else:    
+        return render_template('index.html')
 
 @app.route('/welcome')
 def welcome():
-    return render_template('welcome.html',user=session['user'])  # render a template
+    if session.get('loggedin') is not None:
+        return render_template('welcome.html',user=session['user'])  # render a template
+    else:
+        return render_template('index.html')
 
 ## Session Token generation after login
-
 @app.before_request
 def before_request():
     g.user = None
@@ -60,29 +65,35 @@ def before_request():
 # Scenario pages 
 @app.route('/scenario')
 def scenarioOne ():
-    return render_template('scenarios.html')
-
+    if session.get('loggedin') is not None:
+        return render_template('scenarios.html')
+    else:
+        return render_template('index.html')
 # SSH Docker container IP
 # This function generate or get IP Docker Container IP
 
 @app.route('/Connect')
 def ConnectInfo():
-    ContainerName = None
-    ContainerIP = None
-    ip_add = None
-    ContainerName = session['user']
-    client = docker.DockerClient()
-    container = client.containers.get(session['user'])
-    ContainerIP = container.attrs['NetworkSettings']['IPAddress']
-    return ContainerIP
-    g.hostip = ContainerIP
-
+    if session.get('loggedin') is not None:
+        ContainerName = None
+        ContainerIP = None
+        ip_add = None
+        ContainerName = session['user']
+        client = docker.DockerClient()
+        container = client.containers.get(session['user'])
+        ContainerIP = container.attrs['NetworkSettings']['IPAddress']
+        return ContainerIP
+        g.hostip = ContainerIP
+    else:
+        return render_template('index.html')
 # Rendering page for docker container ssh 
 @app.route('/ssh')
 def connectrout ():
-    hostip = ConnectInfo()
-    #return hostip
-    return render_template('ssh.html', hostip=hostip)
+    if session.get('loggedin') is not None:
+        hostip = ConnectInfo()
+        return render_template('ssh.html', hostip=hostip)
+    else:
+        return render_template('index.html')
 
 # Login Section
 @app.route('/login', methods=['GET', 'POST'])
@@ -113,10 +124,7 @@ def index():
             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
-
-def Debug():
-    print(dockerRegistry)
-    return dockerRegistry   
+  
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True)

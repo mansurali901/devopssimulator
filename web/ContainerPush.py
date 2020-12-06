@@ -8,6 +8,9 @@ containerpush = Blueprint('containerpush', __name__)
 
 @containerpush.route('/scene1')
 def index():
-    print('Starting pushing docker image')
-    client = docker.from_env()
-    client.images.push(repository='mansurali901/test')
+    if session.get('loggedin') is not None:
+        print('Starting pushing docker image')
+        client = docker.from_env()
+        client.images.push(repository='mansurali901/test')
+    else:
+        return render_template('index.html')
