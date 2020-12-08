@@ -14,7 +14,7 @@ from ContainerCommit import containercommit
 from containerCreate import containercreate
 from ScenarioVerify import containerverify
 from logout import logout
-
+from resultGet import resultGet, resultGetbyID, resultPOST
 # create the application object
 app = Flask(__name__)
 app.secret_key = "10pearls"  
@@ -24,6 +24,9 @@ app.register_blueprint(containercommit)
 app.register_blueprint(containercreate)
 app.register_blueprint(containerverify)
 app.register_blueprint(logout)
+app.register_blueprint(resultGet)
+app.register_blueprint(resultGetbyID)
+app.register_blueprint(resultPOST)
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
