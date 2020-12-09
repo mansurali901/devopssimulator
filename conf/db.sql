@@ -1,3 +1,4 @@
+/* Main DB creation */
 CREATE DATABASE IF NOT EXISTS `pythonlogin` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `pythonlogin`;
 CREATE TABLE IF NOT EXISTS `accounts` (
@@ -8,4 +9,18 @@ CREATE TABLE IF NOT EXISTS `accounts` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `accounts` (`id`, `username`, `password`, `email`) VALUES (1, 'test', 'test', 'test@test.com');
+/* Initial Account creation */
+INSERT INTO `accounts` (
+	`id`, `username`, 
+	`password`, 
+	`email`) VALUES 
+	(1, 'test', 'test', 'test@test.com'
+	);
+
+/* results table creation */
+
+ create table scenarios (
+	id int auto_increment NOT NULL, 
+ 	casenum varchar(10) NOT NULL, validation varchar(10) NOT NULL, 
+ 	PRIMARY KEY(id)
+	 );
