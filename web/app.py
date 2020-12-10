@@ -15,6 +15,8 @@ from containerCreate import containercreate
 from ScenarioVerify import containerverify
 from logout import logout
 from resultGet import resultGet, resultGetbyID, resultPOST
+from resultPost import resultpost
+
 # create the application object
 app = Flask(__name__)
 app.secret_key = "10pearls"  
@@ -27,6 +29,7 @@ app.register_blueprint(logout)
 app.register_blueprint(resultGet)
 app.register_blueprint(resultGetbyID)
 app.register_blueprint(resultPOST)
+app.register_blueprint(resultpost)
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
@@ -55,6 +58,7 @@ def home():
 # Login Section
 @app.route('/login', methods=['GET', 'POST'])
 def index():
+
     msg = ''
     error = None
     user = None
@@ -74,7 +78,8 @@ def index():
             session['username'] = account['username']
 
             # Redirect to home page
-            return render_template('welcome.html', msg=msg)
+            return redirect('/')
+            #return render_template('welcome.html', msg=msg)
 
         else:
             # Account doesnt exist or username/password incorrect
