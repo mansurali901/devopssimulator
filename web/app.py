@@ -13,6 +13,7 @@ import os
 from ContainerCommit import containercommit
 from containerCreate import containercreate
 from ScenarioVerify import containerverify
+from ScenarioVerify2 import containerverify2
 from logout import logout
 from resultGet import resultGet, resultGetbyID, resultPOST
 from resultPost import resultpost
@@ -30,6 +31,7 @@ app.register_blueprint(resultGet)
 app.register_blueprint(resultGetbyID)
 app.register_blueprint(resultPOST)
 app.register_blueprint(resultpost)
+app.register_blueprint(containerverify2)
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
@@ -51,7 +53,12 @@ mysql = MySQL(app)
 @app.route('/', methods=['GET', 'POST', 'UPDATE'])
 def home():
     if session.get('loggedin') is not None:
+        # HTML_File=open('welcome.html','r')
+        # s = HTML_File.read().format(p=())
+
+        #index = open("welcome.html").read().format(username=session['user'])
         return render_template('welcome.html')
+        #return index
     else:    
         return redirect(url_for('login')) 
 
@@ -135,7 +142,23 @@ def connectrout ():
         return render_template('ssh.html', hostip=hostip)
     else:
         return redirect('/login')
-  
+
+@app.route('/apache', methods=['GET'])
+def apache ():
+    if session.get('loggedin') is not None:
+        hostip = ConnectInfo()
+        return render_template('apache.html')
+    else:
+        return redirect('/login')
+
+@app.route('/mysql', methods=['GET'])
+def mysql ():
+    if session.get('loggedin') is not None:
+        hostip = ConnectInfo()
+        return render_template('mysql.html')
+    else:
+        return redirect('/login')
+        
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True)

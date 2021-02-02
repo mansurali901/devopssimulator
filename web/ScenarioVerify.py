@@ -33,16 +33,17 @@ def apache2():
         g.csID = session['user']
         g.scName = 'apache'
         g.Task = ['server', 'portverify','alias','directory','ssl']
+        g.comContainer = ['dpkg -l apache2', 'netstat -ntlap |grep :80 |grep apache', 'curl -i web1.10pearls.com', 'ls -la /usr/share/doc/html/', 'curl -i --insecure https://web1.10pearls.com']
         # SQL query for posting Data for result
         g.sqlfrom = "insert into scenarios (casenum, validation, username, task) values (%s, %s, %s, %s)"
         command = client.containers.get(g.csID)
 
         # Setup verification
-        apache2 = command.exec_run("dpkg -l apache2")
-        PortVerify = command.exec_run("netstat -ntlap |grep :80 |grep apache")
-        Alias = command.exec_run("curl -i web1.10pearls.com")
-        Directory = command.exec_run("ls -la /usr/share/doc/html/")
-        SSL = command.exec_run("curl -i --insecure https://web1.10pearls.com")
+        apache2 = command.exec_run(g.comContainer[0])
+        PortVerify = command.exec_run(g.comContainer[1])
+        Alias = command.exec_run(g.comContainer[2])
+        Directory = command.exec_run(g.comContainer[3])
+        SSL = command.exec_run(g.comContainer[4])
 
         # Converting docker exec Object to String 
         list_string = str(apache2)
@@ -75,7 +76,7 @@ def apache2():
             conn.commit()            
         else:
             print('Apache is not running at 0.0.0.0:80')
-            Data = [(g.scName,'false', g.csID[1],g.Task[1])]
+            Data = [(g.scName,'false', g.csID,g.Task[1])]
             c.executemany(g.sqlfrom, Data)
             conn.commit()
 
