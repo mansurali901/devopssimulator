@@ -21,6 +21,9 @@ INSERT INTO `accounts` (
 
  create table scenarios (
 	id int auto_increment NOT NULL, 
- 	casenum varchar(10) NOT NULL, validation varchar(10) NOT NULL, 
+ 	casenum varchar(10) NOT NULL, 
+	validation varchar(10) NOT NULL, 
+	username varchar(20), 
+	task varchar(20), 
  	PRIMARY KEY(id)
 	 );

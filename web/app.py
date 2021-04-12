@@ -8,6 +8,8 @@ from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re
 import os
+from dbconnection import connection # DB connection Module 
+
 
 # Blueprints import here 
 from ContainerCommit import containercommit
@@ -17,6 +19,7 @@ from ScenarioVerify2 import containerverify2
 from logout import logout
 from resultGet import resultGet, resultGetbyID, resultPOST
 from resultPost import resultpost
+from mysql import mysqltask
 
 # create the application object
 app = Flask(__name__)
@@ -32,6 +35,7 @@ app.register_blueprint(resultGetbyID)
 app.register_blueprint(resultPOST)
 app.register_blueprint(resultpost)
 app.register_blueprint(containerverify2)
+app.register_blueprint(mysqltask)
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
@@ -45,7 +49,8 @@ app.config['MYSQL_DB'] = app.config.get("AUTHDB")
 # # Callable Properties 
 dockerRegistry = app.config.get("REGISTRY")
 dockerUsername = app.config.get("DOCKER_USER")
-dockerPassword = app.config.get("DOCKER_PASSWORD")   
+dockerPassword = app.config.get("DOCKER_PASSWORD")  
+dockerHost = app.config.get("DOCKER_HOST") 
 
 # Intialize MySQL
 mysql = MySQL(app)
@@ -60,7 +65,7 @@ def home():
         return render_template('welcome.html')
         #return index
     else:    
-        return redirect(url_for('login')) 
+        return redirect(url_for('/login')) 
 
 # Login Section
 @app.route('/login', methods=['GET', 'POST'])
@@ -73,24 +78,27 @@ def index():
         username = request.form['username']
         password = request.form['password']
     # Check if account exists using MySQL
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
+        c, conn = connection()  
+#        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        c.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password,))
         # Fetch one record and return result
-        account = cursor.fetchone()
+        rows = [c.fetchone()]
+        for account in rows:
         # If account exists in accounts table in out database
-        if account:
-            # Create session data, we can access this data in other routes
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
+            if account:
+                # Create session data, we can access this data in other routes
+#                print (account)            
+                session['loggedin'] = True
+                session['password'] = account[2]
+                session['username'] = account[2]
 
             # Redirect to home page
-            return redirect('/')
+                return redirect('/')
             #return render_template('welcome.html', msg=msg)
 
-        else:
+            else:
             # Account doesnt exist or username/password incorrect
-            msg = 'Incorrect username/password!'
+             msg = 'Incorrect username/password!'
     # Show the login form with message (if any)
     return render_template('index.html', msg=msg)
 
@@ -120,13 +128,14 @@ def scenarioOne ():
 # SSH Docker container IP
 # This function generate or get IP Docker Container IP
 
-@app.route('/Connect', methods=['GET', 'POST', 'UPDATE'])
+@app.route('/connect', methods=['GET', 'POST', 'UPDATE'])
 def ConnectInfo():
     if session.get('loggedin') is not None:
         ContainerName = None
         ContainerIP = None
         ip_add = None
         ContainerName = session['user']
+        #client = docker.DockerClient(base_url='tcp://192.168.1.104:2375')
         client = docker.DockerClient()
         container = client.containers.get(session['user'])
         ContainerIP = container.attrs['NetworkSettings']['IPAddress']
@@ -146,20 +155,22 @@ def connectrout ():
 @app.route('/apache', methods=['GET'])
 def apache ():
     if session.get('loggedin') is not None:
-        hostip = ConnectInfo()
+        #hostip = ConnectInfo()
         return render_template('apache.html')
     else:
         return redirect('/login')
 
-@app.route('/mysql', methods=['GET'])
-def mysql ():
-    if session.get('loggedin') is not None:
-        hostip = ConnectInfo()
-        return render_template('mysql.html')
-    else:
-        return redirect('/login')
-        
+# +++++++++++ I will Delete this code after sometime ++++++++
+# @app.route('/mysql', methods=['GET'])                     +
+# def mysql ():                                             +
+#     if session.get('loggedin') is not None:               +
+#         hostip = ConnectInfo()                            +
+#         return render_template('mysql.html')              +
+#     else:                                                 +
+#         return redirect('/login')                         +    
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 # start the server with the 'run()' method
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 

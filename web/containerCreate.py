@@ -11,6 +11,7 @@ containercreate = Blueprint('containercreate', __name__)
 def index():
     if session.get('loggedin') is not None:
         client = docker.from_env()
+        #client = docker.DockerClient(base_url='tcp://192.168.1.104:2375')
         ContainerName = session['user']
         container = client.containers.run('mansurali901/openssh:1.0.0', '/bin/sleep 10800', detach=True, name=ContainerName, environment=['env=DEV', 'ROOT_PASS=mypass'])
         commandContainer = client.containers.get(ContainerName)

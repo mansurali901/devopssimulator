@@ -15,7 +15,7 @@ app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
 
 containerverify = Blueprint('containerverify', __name__)
 
-@containerverify.route('/verify', methods=['GET', 'POST', 'UPDATE'])
+@containerverify.route('/apacheCheck', methods=['GET', 'POST', 'UPDATE'])
 ######### POST Function will bring up in next release
 # def PostData(user=None, task=None, status=None):
     

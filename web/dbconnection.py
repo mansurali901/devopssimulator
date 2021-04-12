@@ -19,5 +19,4 @@ def connection():
                            passwd = app.config['MYSQL_PASSWORD'],
                            db = app.config['MYSQL_DB'])
     c = conn.cursor()
-
     return c, conn
