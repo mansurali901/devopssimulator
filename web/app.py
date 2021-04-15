@@ -15,11 +15,11 @@ from dbconnection import connection # DB connection Module
 from ContainerCommit import containercommit
 from containerCreate import containercreate
 from ScenarioVerify import containerverify
-from ScenarioVerify2 import containerverify2
 from logout import logout
 from resultGet import resultGet, resultGetbyID, resultPOST
 from resultPost import resultpost
 from mysql import mysqltask
+from VerifyModule import mysqlverify
 
 # create the application object
 app = Flask(__name__)
@@ -34,8 +34,8 @@ app.register_blueprint(resultGet)
 app.register_blueprint(resultGetbyID)
 app.register_blueprint(resultPOST)
 app.register_blueprint(resultpost)
-app.register_blueprint(containerverify2)
 app.register_blueprint(mysqltask)
+app.register_blueprint(mysqlverify)
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)

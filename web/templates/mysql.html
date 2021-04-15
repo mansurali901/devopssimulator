@@ -93,17 +93,20 @@
         <p> Base OS : Ubuntu 18.04 LTS </p>
         <p>Environment : Docker Engine 18+</p>
         <p> We would like you setup Mysql server with below requirements : </p>
+        <p>Note : <b>Do not set Password for root user </b></p>
         <ul>
           <li>Install Mysql Server  </li>
           <li>Server should be available with private IP</li>
           <li>Default DB engine should be InnoDB </li>
           <li>One Database with name 10PearlsDB</li>
-          <li>One Master user that can only access 10pearlsDB with admin privileges</li>
+          <li>Create a user with name <b>"master"</b> and it can only access <b>10pearlsDB</b> with admin privileges</li>
           <li>One user that has access to 10PearlsDB with readonly permissions </li>
           <li>Set InnoDB engine for File per table </li>
         </ul> 
             <a href = /scene1> Ready for Scenario </a> </br>
             <a href = /ssh target="_blank"> Connect to Simulator </a>
+      </br>
+            <a href = /mysqlverify target="/">End Session</a>
       <br>  
       <p>Click <a href="/"> here </a> to go home.</p>
     </div>

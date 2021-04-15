@@ -27,3 +27,14 @@ INSERT INTO `accounts` (
 	task varchar(20), 
  	PRIMARY KEY(id)
 	 );
+
+/* Conditions Table */
+
+CREATE TABLE conditions (      
+	id MEDIUMINT NOT NULL AUTO_INCREMENT,      
+	command VARCHAR(200) NOT NULL,  
+	find VARCHAR(200) NOT NULL, 
+	task VARCHAR(30), 
+	status VARCHAR(10),   
+	PRIMARY KEY (id) 
+	);
