@@ -38,3 +38,10 @@ CREATE TABLE conditions (
 	status VARCHAR(10),   
 	PRIMARY KEY (id) 
 	);
+
+ CREATE TABLE `tasks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `taskName` varchar(25) NOT NULL,
+  `taskCode` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8

@@ -1,0 +1,22 @@
+<table> 
+    <thead> 
+    <tr> 
+        <th>Profile</th> 
+        <th>Task Name </th> 
+        <th>Passed Tasks </th>
+        <th>Failed Tasks </th>
+        <th>Total Tasks </th>
+    </tr> 
+    </thead> 
+    <tbody> 
+        {% for row in value %}  
+            <tr> 
+                <td>{{row[5]}}</td> 
+                <td>{{row[1]}}</td> 
+                <td>{{row[2]}}</td> 
+                <td>{{row[3]}}</td> 
+                <td>{{row[4]}}</td> 
+            </tr> 
+        {% endfor %} 
+    </tbody> 
+</table> 

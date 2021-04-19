@@ -14,12 +14,21 @@ from dbconnection import connection # DB connection Module
 # Blueprints import here 
 from ContainerCommit import containercommit
 from containerCreate import containercreate
-from ScenarioVerify import containerverify
 from logout import logout
-from resultGet import resultGet, resultGetbyID, resultPOST
-from resultPost import resultpost
 from mysql import mysqltask
-from VerifyModule import mysqlverify
+from apache import apachetask
+from VerifyModule import verifymodule
+from awstasks import awstasks
+from reports import results
+from resultpublish import publisher
+
+# +++++ Discarded Blueprint keeping for record will delete soon
+# In release 0.0.2 we have added dynamic functionality to our test 
+# cases therefore we are removing old style code but keeping it for
+# records 
+#from resultGet import resultGet, resultGetbyID, resultPOST
+#from resultPost import resultpost
+#from ScenarioVerify import containerverify
 
 # create the application object
 app = Flask(__name__)
@@ -28,14 +37,26 @@ app.secret_key = "10pearls"
 # Loading all Blueprints 
 app.register_blueprint(containercommit)
 app.register_blueprint(containercreate)
-app.register_blueprint(containerverify)
 app.register_blueprint(logout)
-app.register_blueprint(resultGet)
-app.register_blueprint(resultGetbyID)
-app.register_blueprint(resultPOST)
-app.register_blueprint(resultpost)
 app.register_blueprint(mysqltask)
-app.register_blueprint(mysqlverify)
+app.register_blueprint(apachetask)
+app.register_blueprint(verifymodule)
+app.register_blueprint(awstasks)
+app.register_blueprint(results)
+app.register_blueprint(publisher)
+
+# +++++ Discarded Blueprint keeping for record will delete soon
+# In release 0.0.2 we have added dynamic functionality to our test 
+# cases therefore we are removing old style code but keeping it for
+# records 
+
+
+#app.register_blueprint(resultGet)
+#app.register_blueprint(resultGetbyID)
+#app.register_blueprint(resultPOST)
+#app.register_blueprint(resultpost)
+#app.register_blueprint(containerverify)
+
 
 # Application configuration file
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
@@ -90,7 +111,7 @@ def index():
 #                print (account)            
                 session['loggedin'] = True
                 session['password'] = account[2]
-                session['username'] = account[2]
+                session['username'] = account[1]
 
             # Redirect to home page
                 return redirect('/')
@@ -151,16 +172,17 @@ def connectrout ():
         return render_template('ssh.html', hostip=hostip)
     else:
         return redirect('/login')
-
-@app.route('/apache', methods=['GET'])
-def apache ():
-    if session.get('loggedin') is not None:
-        #hostip = ConnectInfo()
-        return render_template('apache.html')
-    else:
-        return redirect('/login')
-
+        
 # +++++++++++ I will Delete this code after sometime ++++++++
+# @app.route('/apache', methods=['GET'])
+# def apache ():
+#     if session.get('loggedin') is not None:
+#         #hostip = ConnectInfo()
+
+#         return render_template('apache.html')
+#     else:
+#         return redirect('/login')
+
 # @app.route('/mysql', methods=['GET'])                     +
 # def mysql ():                                             +
 #     if session.get('loggedin') is not None:               +
@@ -169,6 +191,15 @@ def apache ():
 #     else:                                                 +
 #         return redirect('/login')                         +    
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+@app.route('/test')
+def test_route():
+    user_details = {
+        'name': 'John',
+        'email': 'john@doe.com'
+    }
+
+    return render_template('test.html', user=user_details)
 
 # start the server with the 'run()' method
 if __name__ == '__main__':

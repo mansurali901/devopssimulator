@@ -21,6 +21,8 @@ mysqltask = Blueprint('mysqltask', __name__)
 def index():
     if session.get('loggedin') is not None:
         #hostip = ConnectInfo()
+        stageMode = 'mysql'
+        session['stage'] = stageMode  
         return render_template('mysql.html')
     else:
         return redirect('/login')

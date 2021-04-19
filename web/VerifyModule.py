@@ -15,9 +15,9 @@ app.secret_key = "10pearls"
 app.config.from_pyfile(os.path.join("..", "conf/app.conf"), silent=False)
 
 # Blue print declearation 
-mysqlverify = Blueprint('mysqlverify', __name__)
+verifymodule = Blueprint('verifymodule', __name__)
 
-@mysqlverify.route('/mysqlverify', methods=['GET', 'POST', 'UPDATE'])
+@verifymodule.route('/verifymodule', methods=['GET', 'POST', 'UPDATE'])
 def index():
     if session.get('loggedin') is not None:
      # Initializing DB connection and DB Cursor 
@@ -39,8 +39,11 @@ def index():
         ##############################################################################
 
         # Check if account exists using MySQL
+        
+        stage = session['stage'] 
+        #stage='mysql'
         c, conn = connection()  
-        c.execute("select * from conditions where stage='mysql'")
+        c.execute("select * from conditions where stage=%s", (stage,))
         records = c.fetchall()
         #print(records)
         for data in records:
@@ -64,7 +67,8 @@ def index():
                 c.executemany(g.sqlfrom, Data)
                 conn.commit()
                 #return redirect('/mysql')
-        return 'conditionvalidated'
+        session.pop('stage', None)        
+        return render_template('welcome.html')
     else:
         return redirect('/login')
         

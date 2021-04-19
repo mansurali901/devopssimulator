@@ -14,6 +14,12 @@ INSERT INTO conditions (command, find, task, status, stage ) VALUES ('curl -i --
 
 INSERT INTO conditions (command, find, task, status, stage ) VALUES ('dpkg -l mysql-server', 'Version','server', '1', 'mysql');
 INSERT INTO conditions (command, find, task, status, stage ) VALUES ('netstat -ntlap |grep :3306 |grep -v 33060 |awk '{print $4}'', '0.0.0.0:3306','server', '1', 'mysql');
-INSERT INTO conditions (command, find, task, status, stage ) VALUES ('/opt/scripts/enginecheck.sh', 'InnoDB','engine', '1', 'mysql');
-INSERT INTO conditions (command, find, task, status, stage ) VALUES ('/opt/scripts/dbcheck.sh', '10PearlsDB','dbcheck', '1', 'mysql');
+INSERT INTO conditions (command, find, task, status, stage ) VALUES ('python3 /opt/scripts/enginecheck.py', 'InnoDB','engine', '1', 'mysql');
+INSERT INTO conditions (command, find, task, status, stage ) VALUES ('python3 /opt/scripts/print.py', '10PearlsDB','dbcheck', '1', 'mysql');
+INSERT INTO conditions (command, find, task, status, stage ) VALUES ('python3 /opt/scripts/usercheck.py', 'User-has','dbcheck', '1', 'mysql');
 
+
+/* Migrations for tasks*/
+ insert into tasks (taskName, taskCode) values ('apache', '0001')
+ insert into tasks (taskName, taskCode) values ('mysql', '0002');
+ insert into tasks (taskName, taskCode) values ('aws', '0003');
