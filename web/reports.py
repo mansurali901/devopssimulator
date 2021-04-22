@@ -32,7 +32,7 @@ def index():
         
         c, conn = connection()  
         g.sqlfrom = "insert into results (taskName, correct, wrong, total, username, percentage) values (%s, %s, %s, %s, %s, %s)"
-        #g.update = "update results set percentage=("select * from("select r.correct * 100 / r.total from results r where taskName=%s", (bytaks,)))tbltmp) "where taskName=%s" (bytaks,));
+        #g.update = "update results set percentage=(select * from(select r.correct * 100 / r.total from results r where taskName=%s, (bytaks,))tbltmp) "where taskName=%s" (bytaks,));
         c.execute("select taskName from tasks")
         TasksNames = c.fetchall()
 
