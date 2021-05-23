@@ -21,6 +21,7 @@ from VerifyModule import verifymodule
 from awstasks import awstasks
 from reports import results
 from resultpublish import publisher
+from linux import linux 
 
 # +++++ Discarded Blueprint keeping for record will delete soon
 # In release 0.0.2 we have added dynamic functionality to our test 
@@ -44,6 +45,7 @@ app.register_blueprint(verifymodule)
 app.register_blueprint(awstasks)
 app.register_blueprint(results)
 app.register_blueprint(publisher)
+app.register_blueprint(linux)
 
 # +++++ Discarded Blueprint keeping for record will delete soon
 # In release 0.0.2 we have added dynamic functionality to our test 
@@ -129,6 +131,9 @@ def welcome():
         return render_template('welcome.html',user=session['user'])  # render a template
     else:
         return redirect('/login')
+@app.route('/clock')
+def clock():
+        return render_template('clock.html',user=session['user'])  # render a template
 
 ## Session Token generation after login
 @app.before_request

@@ -31,7 +31,8 @@ def index():
         # SQL query for posting Data for result
         g.sqlfrom = "insert into scenarios (casenum, validation, username, task) values (%s, %s, %s, %s)"
         c.executemany(g.sqlfrom, Data)
-        conn.commit()          
+        conn.commit()  
+        conn.close()        
     else:
         return redirect('/login')        
     return 'end'

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>10Pearls DevOps Simulator</title>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="../static/login.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    -->
+    <!--
+      
+    -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+       
+       $('#content').load("/clock");
+    
+    });
+
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      
+      /* Style the header */
+      header {
+        background-color: #666;
+        padding: 30px;
+        text-align: center;
+        font-size: 35px;
+        color: white;
+      }
+      
+      /* Create two columns/boxes that floats next to each other */
+      nav {
+        float: left;
+        width: 30%;
+        height: 300px; /* only for demonstration, should be removed */
+        background: #ccc;
+        padding: 20px;
+      }
+      
+      /* Style the list inside the menu */
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      
+      article {
+        float: left;
+        padding: 20px;
+        width: 70%;
+        background-color: #f1f1f1;
+        height: 300px; /* only for demonstration, should be removed */
+      }
+      
+      /* Clear floats after the columns */
+      section:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+      
+      /* Style the footer */
+      footer {
+        background-color: #777;
+        padding: 10px;
+        text-align: center;
+        color: white;
+      }
+      
+      /* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+      @media (max-width: 600px) {
+        nav, article {
+          width: 100%;
+          height: auto;
+        }
+      }
+      .center {
+        border: 0px solid #FFFF00;
+        display: flex;
+        height: 150px;
+        position: absolute;
+        left: 50%;
+        margin-left: 30%;
+        }
+
+      </style>
+  <!--
+    CSS Style 
+  -->
+
+  </head>
+  <body>
+    <div class=center id="content"></div>
+    <div>
+      <br>
+      <table border="0", align="center" > 
+        <tr>
+          <td>
+            <h2>  Welcome to 10Pearls DevOps Testing Suite</i></h2>
+          </td>
+        </tr>
+      </table>
+        <h4>Scenario # 3 Linux Skill Showcase </h4>
+        <p> Base OS : Ubuntu 18.04 LTS </p>
+        <p>Environment : Docker Engine 18+</p>
+        <p> We would like you to show case your some basic linux skill : </p>
+        <p>Note : <b>For saving output results use advised locations </b></p>
+        <ul>
+          <li>Install Pip 3 version as additional Pip version and setup pip alias as pip3</li>
+          <li>Install GCC compiler </li>
+          <li>Get the CPU Architecture and save to /tmp/cpuarch.txt</li>
+          <li>Add an entry in host file for localhost as srv1.10pearls.com </li>
+          <li>Install Redis from Source Code (Package Download URL : http://download.redis.io/redis-stable.tar.gz)</li>
+          <li>Create a UNIX user and add to sudo group </li>
+          <li>Generate list of installed Packages and save to /tmp/packagelist.txt </li>
+          <li>Get the list of top 5 memory consuming process and save result at /tmp/processmem.txt</li>
+          <li>Get the list of top 5 CPU consuming process /tmp/processcpu.txt</li>
+        </ul> 
+            <a href = /scene1> Ready for Scenario </a> </br>
+            <a href = /ssh target="_blank"> Connect to Simulator </a>
+      </br>
+            <a href = /verifymodule target="/">End Session</a>
+      <br>  
+      <p>Click <a href="/"> here </a> to go home.</p>
+    </div>
+  </body>
+</html>

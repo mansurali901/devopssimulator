@@ -10,7 +10,17 @@
     <!--
       
     -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+       
+       $('#content').load("/clock");
+    
+    });
+
+    </script>
     <style>
+      
       * {
         box-sizing: border-box;
       }
@@ -73,6 +83,14 @@
           height: auto;
         }
       }
+      .center {
+        border: 0px solid #FFFF00;
+        display: flex;
+        height: 150px;
+        position: absolute;
+        left: 50%;
+        margin-left: 30%;
+        }
       </style>
   <!--
     CSS Style 
@@ -80,6 +98,8 @@
 
   </head>
   <body>
+    <div class=center id="content"></div>
+
     <div>
       <br>
       <table border="0", align="center" > 

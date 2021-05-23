@@ -21,10 +21,12 @@ publisher = Blueprint('publisher', __name__)
 
 @publisher.route('/publisher', methods=['GET', 'POST', 'UPDATE'])
 
-def example(): 
-    
-    conn = MySQLdb.connect("127.0.0.1","root","Welcome@1","pythonlogin" ) 
-    cursor = conn.cursor() 
-    cursor.execute("select * from results") 
-    data = cursor.fetchall() #data from database 
-    return render_template("example.html", value=data) 
+def resultPublish(): 
+
+    # Gloabal Veriables for different operations in module
+    g.csID = session['user']
+    c, conn = connection()
+
+    c.execute("select * from results where username=%s", (g.csID,))
+    data = c.fetchall() #data from database 
+    return render_template("results.html", value=data) 
